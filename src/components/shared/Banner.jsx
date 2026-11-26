@@ -1,143 +1,164 @@
 "use client";
 
-import heroBg from "@/assets/hero-bg.jpg";
 import Image from "next/image";
 import Link from "next/link";
-import { FaArrowRight, FaBookOpen, FaStar, FaShieldAlt } from "react-icons/fa";
-import { useSpring, animated } from "@react-spring/web";
+import { useEffect, useMemo, useState } from "react";
+import heroBg from "@/assets/hero-bg.jpg";
+import { FaArrowLeft, FaArrowRight, FaBookOpen } from "react-icons/fa";
 
-const stats = [
-  { value: "5,000+", label: "Books" },
-  { value: "10k+", label: "Readers" },
-  { value: "4.8", label: "Rating" },
+const languageSlides = [
+  { language: "Japanese", native: "日本語", title: "Learn Japanese, one page at a time.", label: "Japanese language" },
+  { language: "German", native: "Deutsch", title: "Find your words in German.", label: "German language" },
+  { language: "English", native: "English", title: "Build confidence in English.", label: "English learning" },
+  { language: "Korean", native: "한국어", title: "Open a new chapter in Korean.", label: "Korean language" },
+  { language: "Bangla", native: "বাংলা", title: "Explore the richness of Bangla.", label: "Bangla language" },
+  { language: "Arabic", native: "العربية", title: "Begin your Arabic learning journey.", label: "Arabic language" },
+  { language: "Chinese", native: "中文", title: "Take your first steps in Chinese.", label: "Chinese language" },
 ];
 
-export default function Banner() {
-  // Main image floats up and down
-  const float = useSpring({
-    from: { transform: "translateY(0px)" },
-    to: { transform: "translateY(-16px)" },
-    config: { duration: 2500 },
-    loop: { reverse: true },
-  });
+export default function Banner({ books = [] }) {
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const slides = useMemo(() => languageSlides.map((slide) => {
+    const term = slide.language.toLowerCase();
+    const featuredBook = books.find((book) =>
+      `${book?.category || ""} ${book?.title || ""} ${book?.description || ""}`.toLowerCase().includes(term) && book?.image_url
+    );
+    return { ...slide, featuredBook };
+  }), [books]);
 
-  // Small badge floats the opposite way
-  const floatAlt = useSpring({
-    from: { transform: "translateY(-10px)" },
-    to: { transform: "translateY(10px)" },
-    config: { duration: 3000 },
-    loop: { reverse: true },
-  });
+  useEffect(() => {
+    if (paused) return undefined;
+    const timer = window.setInterval(() => setActive((index) => (index + 1) % slides.length), 6500);
+    return () => window.clearInterval(timer);
+  }, [slides.length, paused]);
+
+  const move = (step) => setActive((index) => (index + step + slides.length) % slides.length);
 
   return (
-    // RULE: light-gradient -> dark gradient
-    <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-red-50 transition-colors duration-300 dark:from-slate-950 dark:via-zinc-950 dark:to-red-950/30">
-      {/* Soft background glows: pastel -> low-opacity bright color */}
-      <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-red-200/40 blur-3xl dark:bg-red-500/10" />
-      <div className="pointer-events-none absolute -bottom-24 right-0 h-80 w-80 rounded-full bg-green-200/40 blur-3xl dark:bg-green-500/10" />
+    <section
+      className="overflow-hidden bg-gradient-to-b from-[#f7f4ee] to-[#fdf1e4] dark:from-[#121d29] dark:to-[#0f1923]"
+      aria-label="Browse language learning books"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="container mx-auto px-5 py-10 sm:px-8 sm:py-14 lg:py-16">
+        <div className="relative overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-[#0c2033] via-[#10283f] to-[#1b4268] text-white shadow-2xl shadow-[#10283f]/30 ring-1 ring-white/10 sm:rounded-[2rem]">
+          {/* Atmosphere */}
+          <div aria-hidden="true" className="pointer-events-none absolute -left-20 -top-24 h-80 w-80 rounded-full bg-[#e87817]/25 blur-3xl" />
+          <div aria-hidden="true" className="pointer-events-none absolute -bottom-32 right-10 h-96 w-96 rounded-full bg-[#4f86c6]/25 blur-3xl" />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 opacity-[0.07]"
+            style={{ backgroundImage: "radial-gradient(#fff 1px, transparent 1px)", backgroundSize: "22px 22px" }}
+          />
 
-      <div className="container relative mx-auto flex flex-col items-center gap-12 px-5 py-14 sm:py-20 lg:flex-row lg:gap-16 lg:py-28">
-        {/* Left: content */}
-        <div className="flex-1 text-center lg:text-left">
-          {/* RULE: white surface -> zinc-900, colored text 600 -> 400 */}
-          <p className="inline-flex items-center gap-2 rounded-full border border-red-100 bg-white px-4 py-1.5 text-xs font-semibold text-red-600 shadow-sm dark:border-red-500/30 dark:bg-zinc-900 dark:text-red-400 sm:text-sm">
-            <FaBookOpen />
-            Your online bookstore
-          </p>
-
-          {/* RULE: dark text -> white */}
-          <h1 className="mt-6 text-4xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
-            Find your next read at{" "}
-            {/* Gradient text is bright enough for both modes: no change needed */}
-            <span className="bg-gradient-to-r from-[#e7000b] to-green-500 bg-clip-text text-transparent">
-              BooksHunt
-            </span>
-          </h1>
-
-          {/* RULE: gray text 600 -> 400 */}
-          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-400 sm:text-lg lg:mx-0">
-            Discover thousands of original books across every genre, pay securely,
-            and start your next reading journey today.
-          </p>
-
-          {/* Buttons */}
-          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
-            {/* Strong colored button: keeps its color, only the glow and ring offset change */}
-            <Link
-              href="/allBooks"
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#e7000b] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-300/60 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/50 dark:focus-visible:ring-offset-zinc-950 sm:w-auto"
+          <div className="relative min-h-[36rem] sm:min-h-[34rem] lg:min-h-[37rem]">
+            <div
+              className="flex h-full transition-transform duration-700 ease-[cubic-bezier(.22,.61,.36,1)] motion-reduce:transition-none"
+              style={{ transform: `translateX(-${active * 100}%)` }}
             >
-              Browse books
-              <FaArrowRight className="transition-transform group-hover:translate-x-1" />
-            </Link>
+              {slides.map((slide, index) => {
+                const image = slide.featuredBook?.image_url || heroBg;
+                const alt = slide.featuredBook?.title || `${slide.language} language learning books`;
+                return (
+                  <article
+                    key={slide.language}
+                    aria-hidden={index !== active}
+                    inert={index !== active}
+                    className="relative grid min-w-full grid-cols-1 items-center gap-8 overflow-hidden px-6 pb-20 pt-8 sm:px-10 sm:pt-10 md:grid-cols-[1.1fr_.9fr] lg:gap-14 lg:px-16 lg:pt-14"
+                  >
+                    {/* Giant native-script watermark */}
+                    <span
+                      aria-hidden="true"
+                      lang=""
+                      className="pointer-events-none absolute -bottom-6 right-4 select-none whitespace-nowrap text-[7rem] font-bold leading-none text-white/[0.06] sm:text-[10rem] lg:right-10 lg:text-[14rem]"
+                    >
+                      {slide.native}
+                    </span>
 
-            {/* Outline button: border, background, text and hover all need a dark partner */}
-            <Link
-              href="/#how-it-works"
-              className="inline-flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-7 py-3.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:border-slate-700 dark:bg-zinc-900 dark:text-slate-200 dark:hover:bg-zinc-800 dark:focus-visible:ring-offset-zinc-950 sm:w-auto"
-            >
-              How it works
-            </Link>
-          </div>
+                    <div className="relative max-w-2xl self-center">
+                      <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-[#ffd1a8] backdrop-blur">
+                        <FaBookOpen className="text-xs" /> {slide.label}
+                      </p>
+                      <h1 className="mt-6 text-4xl font-bold leading-[1.08] tracking-[-.035em] sm:text-5xl lg:text-6xl">
+                        <span className="bg-gradient-to-br from-white via-white to-[#ffd1a8] bg-clip-text text-transparent">
+                          {slide.title}
+                        </span>
+                      </h1>
+                      <p className="mt-5 max-w-lg text-sm leading-7 text-[#d5e0eb] sm:text-base">
+                        Browse language books, study guides, dictionaries, and reading for every stage of your learning journey.
+                      </p>
+                      {slide.featuredBook && (
+                        <p className="mt-4 inline-flex items-center gap-2 text-sm text-white/70">
+                          <span className="h-px w-6 bg-[#f8913e]" />
+                          Featured: <span className="font-semibold text-white">{slide.featuredBook.title}</span>
+                        </p>
+                      )}
+                      <div className="mt-7 flex flex-wrap items-center gap-3">
+                        <Link
+                          href="/allBooks"
+                          className="group/cta inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-[#f8913e] to-[#cf6410] px-5 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#e87817]/30 transition hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[#e87817]/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
+                        >
+                          Explore Now <FaArrowRight className="text-xs transition-transform group-hover/cta:translate-x-1 motion-reduce:transition-none" />
+                        </Link>
+                        <Link
+                          href={`/allBooks?category=${encodeURIComponent(slide.language)}`}
+                          className="rounded-xl border border-white/25 bg-white/5 px-4 py-3 text-sm font-semibold text-white backdrop-blur transition hover:border-white/60 hover:bg-white/15 motion-reduce:transition-none"
+                        >
+                          Browse {slide.language}
+                        </Link>
+                      </div>
+                    </div>
 
-          {/* Stats: divide-* is a color too */}
-          <div className="mx-auto mt-10 grid max-w-md grid-cols-3 divide-x divide-slate-200 dark:divide-slate-700 lg:mx-0">
-            {stats.map((s) => (
-              <div key={s.label} className="px-3 first:pl-0 sm:px-5">
-                <p className="text-xl font-extrabold text-slate-900 dark:text-white sm:text-2xl">
-                  {s.value}
-                </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 sm:text-sm">{s.label}</p>
+                    {/* Cover stack */}
+                    <div className="relative mx-auto w-full max-w-[19rem] md:max-w-[21rem] lg:max-w-[24rem]">
+                      <div aria-hidden="true" className="absolute -inset-6 rounded-full bg-[#f8913e]/25 blur-3xl" />
+                      <div aria-hidden="true" className="absolute inset-0 -rotate-6 rounded-[1.25rem] bg-gradient-to-br from-[#f8913e]/60 to-[#cf6410]/40 ring-1 ring-white/20" />
+                      <div aria-hidden="true" className="absolute inset-0 rotate-3 rounded-[1.25rem] border border-white/25 bg-white/10 backdrop-blur-sm" />
+                      <div className="relative aspect-[4/5] overflow-hidden rounded-[1.25rem] bg-gradient-to-br from-[#fbf6ee] to-[#ece5d8] p-3 shadow-2xl shadow-black/40">
+                        <Image
+                          src={image}
+                          fill
+                          sizes="(max-width: 768px) 75vw, 35vw"
+                          alt={alt}
+                          className={slide.featuredBook ? "object-contain p-4 drop-shadow-[0_14px_14px_rgba(16,40,63,0.35)]" : "object-cover"}
+                          priority={index === 0}
+                        />
+                        <span className="absolute bottom-4 left-4 rounded-full bg-[#10283f]/90 px-3.5 py-1.5 text-xs font-semibold text-white shadow-md backdrop-blur">
+                          AS Books House · {slide.language}
+                        </span>
+                        <span className="absolute right-4 top-4 rounded-full bg-gradient-to-br from-[#f8913e] to-[#cf6410] px-3 py-1 text-sm font-bold text-white shadow-md">
+                          {slide.native}
+                        </span>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+
+            {/* Controls */}
+            <div className="absolute bottom-4 left-6 right-6 flex items-center justify-between gap-4 sm:bottom-6 sm:left-10 sm:right-10 lg:left-16 lg:right-16">
+              <div className="flex items-center gap-2" role="group" aria-label="Choose language category">
+                {slides.map((slide, index) => (
+                  <button
+                    key={slide.language}
+                    type="button"
+                    onClick={() => setActive(index)}
+                    aria-label={`Show ${slide.language} books`}
+                    aria-current={active === index ? "true" : undefined}
+                    className={`h-2 rounded-full transition-all duration-300 motion-reduce:transition-none ${active === index ? "w-8 bg-gradient-to-r from-[#f8913e] to-[#e87817]" : "w-2 bg-white/35 hover:bg-white/70"}`}
+                  />
+                ))}
               </div>
-            ))}
+              <div className="flex items-center gap-3">
+                <span className="hidden text-sm tabular-nums text-white/60 sm:inline">{active + 1} / {slides.length}</span>
+                <button type="button" onClick={() => move(-1)} aria-label="Previous language category" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-white/5 text-white backdrop-blur transition hover:border-white hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"><FaArrowLeft className="text-xs" /></button>
+                <button type="button" onClick={() => move(1)} aria-label="Next language category" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-white/5 text-white backdrop-blur transition hover:border-white hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"><FaArrowRight className="text-xs" /></button>
+              </div>
+            </div>
           </div>
-        </div>
-
-        {/* Right: image */}
-        <div className="relative w-full max-w-sm flex-1 sm:max-w-md lg:max-w-lg">
-          {/* Decorative frame: already translucent, works in both modes */}
-          <div className="absolute inset-0 translate-x-4 translate-y-4 rotate-3 rounded-3xl bg-gradient-to-br from-[#e7000b] to-green-500 opacity-20" />
-
-          <animated.div style={float} className="relative">
-            <Image
-              src={heroBg}
-              width={500}
-              height={500}
-              priority
-              sizes="(max-width: 640px) 90vw, (max-width: 1024px) 448px, 512px"
-              alt="Stack of books on display"
-              className="mx-auto h-auto w-full rounded-3xl object-cover shadow-2xl dark:shadow-black/60"
-            />
-          </animated.div>
-
-          {/* Floating badge: rating */}
-          <animated.div
-            style={floatAlt}
-            className="absolute -left-2 top-8 flex items-center gap-2 rounded-2xl bg-white px-3 py-2 shadow-xl dark:bg-zinc-900 dark:ring-1 dark:ring-slate-800 sm:-left-6 sm:px-4 sm:py-3"
-          >
-            {/* RULE: pastel bg (100) -> translucent bg, text 500 -> 400 */}
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-100 text-yellow-500 dark:bg-yellow-500/20 dark:text-yellow-400 sm:h-10 sm:w-10">
-              <FaStar />
-            </span>
-            <div>
-              <p className="text-sm font-bold text-slate-900 dark:text-white">4.8 / 5</p>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">Reader reviews</p>
-            </div>
-          </animated.div>
-
-          {/* Floating badge: original books */}
-          <animated.div
-            style={floatAlt}
-            className="absolute -right-2 bottom-8 flex items-center gap-2 rounded-2xl bg-white px-3 py-2 shadow-xl dark:bg-zinc-900 dark:ring-1 dark:ring-slate-800 sm:-right-6 sm:px-4 sm:py-3"
-          >
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-500/20 dark:text-green-400 sm:h-10 sm:w-10">
-              <FaShieldAlt />
-            </span>
-            <div>
-              <p className="text-sm font-bold text-slate-900 dark:text-white">100% Original</p>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">Verified books</p>
-            </div>
-          </animated.div>
         </div>
       </div>
     </section>

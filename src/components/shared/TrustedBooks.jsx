@@ -1,6 +1,6 @@
 "use client";
 
-import { BadgeCheck, ShieldCheck, RotateCcw, Truck, BookOpenCheck } from "lucide-react"; // npm i lucide-react
+import { BadgeCheck, ShieldCheck, Languages, PackageCheck, BookOpenCheck } from "lucide-react";
 
 const features = [
   {
@@ -10,26 +10,25 @@ const features = [
   },
   {
     icon: ShieldCheck,
-    title: "Secure Stripe payment",
-    text: "Your card details are encrypted and handled by Stripe. We never see or store them.",
+    title: "Secure SSLCommerz checkout",
+    text: "Continue to the connected SSLCommerz payment flow to complete your order.",
   },
   {
-    icon: RotateCcw,
-    title: "Easy returns",
-    text: "Received a damaged or wrong book? Request a return from your dashboard and we will sort it out.",
+    icon: Languages,
+    title: "Books for language learning",
+    text: "Browse language study, grammar and vocabulary, exam preparation, and reference books.",
   },
   {
-    icon: Truck,
-    title: "Tracked delivery",
-    text: "Follow your order from Processing to Delivered, with an email update at every stage.",
+    icon: PackageCheck,
+    title: "Orders in your account",
+    text: "Review your purchases and payment status from your personal dashboard.",
   },
 ];
 
-// Replace with your real numbers
-const stats = [
-  { value: "5,000+", label: "Original titles" },
-  { value: "10,000+", label: "Happy readers" },
-  { value: "4.8/5", label: "Average rating" },
+const categories = [
+  { value: "7", label: "language shelves" },
+  { value: "Study", label: "grammar & exam prep" },
+  { value: "Reference", label: "dictionaries & resources" },
 ];
 
 const TrustedBooks = () => {
@@ -44,16 +43,15 @@ const TrustedBooks = () => {
               Authentic. Verified. Trusted.
             </p>
             <h2 className="mt-5 text-3xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-white sm:text-4xl lg:text-5xl">
-              Original books you can trust, every single time
+              A reliable place to build your language skills
             </h2>
             <p className="mt-4 max-w-xl text-sm leading-relaxed text-slate-600 dark:text-slate-400 sm:text-base lg:text-lg">
-              We only sell genuine, quality-checked books. If it is not original, it
-              is not on our shelf.
+              Find practical books for learning a language, strengthening your skills, and preparing for your next exam.
             </p>
           </div>
 
           <div className="grid grid-cols-3 divide-x divide-slate-200 rounded-3xl bg-slate-900 py-6 text-center text-white dark:divide-slate-700 dark:bg-zinc-900 dark:ring-1 dark:ring-slate-800 sm:py-8">
-            {stats.map((s) => (
+            {categories.map((s) => (
               <div key={s.label} className="px-2 sm:px-4">
                 <p className="text-xl font-extrabold sm:text-3xl lg:text-4xl">{s.value}</p>
                 <p className="mt-1 text-[11px] text-slate-400 sm:text-sm">{s.label}</p>

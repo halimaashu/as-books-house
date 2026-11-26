@@ -17,6 +17,7 @@
     "better-auth": "^1.6.9",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.4.0",
+    "html-to-image": "^1.11.13",
     "lottie-react": "^2.4.1",
     "lucide-react": "^1.52.0",
     "mongodb": "^7.2.0",

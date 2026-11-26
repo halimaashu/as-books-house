@@ -9,10 +9,11 @@ import {
   FiArrowRight,
   FiShoppingBag,
   FiMail,
+  FiX,
 } from "react-icons/fi";
 
 export const metadata = {
-  title: "Payment successful | BooksHunt",
+  title: "Payment status | AS Books House",
 };
 
 const steps = [
@@ -23,6 +24,17 @@ const steps = [
 
 const page = async ({ params }) => {
   const { tran_id } = await params; // the folder is named [tran_id]
+  let isVerifiedPaid = false;
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}payment/status/${encodeURIComponent(tran_id)}`,
+      { cache: "no-store" },
+    );
+    const result = response.ok ? await response.json() : null;
+    isVerifiedPaid = result?.isPaid === true;
+  } catch {
+    // Fail closed: a status lookup problem must never display a successful payment state.
+  }
 
   return (
     <main className="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-slate-50 px-4 py-12 transition-colors duration-300 dark:bg-zinc-900">
@@ -33,18 +45,19 @@ const page = async ({ params }) => {
       <div className="relative w-full max-w-xl rounded-3xl border border-slate-100 bg-white p-6 text-center shadow-xl shadow-slate-200/60 dark:border-zinc-800 dark:bg-zinc-950 dark:shadow-black/40 sm:p-10">
         {/* Animated check */}
         <div className="relative mx-auto flex h-24 w-24 items-center justify-center">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400/40 dark:bg-green-500/30" />
-          <span className="relative flex h-24 w-24 items-center justify-center rounded-full bg-green-600 text-5xl text-white shadow-lg shadow-green-300 dark:shadow-green-900/50">
-            <FiCheck strokeWidth={3} />
+          <span className={`absolute inline-flex h-full w-full animate-ping rounded-full ${isVerifiedPaid ? "bg-green-400/40 dark:bg-green-500/30" : "bg-amber-400/30 dark:bg-amber-500/20"}`} />
+          <span className={`relative flex h-24 w-24 items-center justify-center rounded-full text-5xl text-white shadow-lg ${isVerifiedPaid ? "bg-green-600 shadow-green-300 dark:shadow-green-900/50" : "bg-amber-600 shadow-amber-300 dark:shadow-amber-900/50"}`}>
+            {isVerifiedPaid ? <FiCheck strokeWidth={3} /> : <FiX strokeWidth={3} />}
           </span>
         </div>
 
         <h1 className="mt-8 text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
-          Payment successful!
+          {isVerifiedPaid ? "Payment successful!" : "Payment not verified"}
         </h1>
         <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
-          Thank you for your order. We have received your payment and we are getting your
-          books ready.
+          {isVerifiedPaid
+            ? "Thank you for your order. We have received your payment and we are getting your books ready."
+            : "We could not confirm payment for this transaction. Your order has not been marked as paid. If you completed payment, please contact support with this transaction ID."}
         </p>
 
         {/* Transaction id */}
@@ -74,8 +87,12 @@ const page = async ({ params }) => {
               >
                 <Icon />
               </span>
-              <p className="mt-3 text-sm font-bold text-slate-900 dark:text-white">{title}</p>
-              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{text}</p>
+              <p className="mt-3 text-sm font-bold text-slate-900 dark:text-white">
+                {!isVerifiedPaid && i === 0 ? "Payment pending" : title}
+              </p>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                {!isVerifiedPaid && i === 0 ? "Payment is not confirmed yet." : text}
+              </p>
             </li>
           ))}
         </ol>
@@ -89,7 +106,7 @@ const page = async ({ params }) => {
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Link
             href="/dashboard/orders"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#e7000b] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-950"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#cf6410] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-950"
           >
             <FiShoppingBag />
             View my orders

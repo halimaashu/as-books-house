@@ -1,7 +1,17 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { Table } from "@heroui/react";
+import {
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableContent,
+  TableFooter,
+  TableHeader,
+  TableRoot,
+  TableRow,
+  TableScrollContainer,
+} from "@/components/ui/HeroTable";
 import Link from "next/link";
 import React from "react";
 import { FaWhatsapp } from "react-icons/fa";
@@ -18,7 +28,7 @@ import {
 } from "react-icons/fi";
 
 export const metadata = {
-  title: "Polytechnic orders | BooksHunt admin",
+  title: "Polytechnic orders | AS Books House admin",
 };
 
 const publisherFilters = [
@@ -314,7 +324,7 @@ const page = async ({ searchParams }) => {
                       {o.quantity} set{Number(o.quantity) > 1 ? "s" : ""}
                     </span>
                     {priceText(o.totalPrice) ? (
-                      <span className="font-extrabold text-[#e7000b] dark:text-red-400">
+                      <span className="font-extrabold text-[#cf6410] dark:text-red-400">
                         {priceText(o.totalPrice)}
                       </span>
                     ) : (
@@ -342,26 +352,26 @@ const page = async ({ searchParams }) => {
 
           {/* Tablet and up: the table */}
           <section className="hidden overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-950 md:block">
-            <Table>
-              <Table.ScrollContainer>
-                <Table.Content
+            <TableRoot>
+              <TableScrollContainer>
+                <TableContent
                   aria-label="Polytechnic orders table"
                   className="min-w-[1100px]"
                 >
-                  <Table.Header>
-                    <Table.Column isRowHeader>Order</Table.Column>
-                    <Table.Column>Customer</Table.Column>
-                    <Table.Column>Book set</Table.Column>
-                    <Table.Column>Qty</Table.Column>
-                    <Table.Column>Total</Table.Column>
-                    <Table.Column>Address</Table.Column>
-                    <Table.Column>Contact</Table.Column>
-                  </Table.Header>
+                  <TableHeader>
+                    <TableColumn isRowHeader>Order</TableColumn>
+                    <TableColumn>Customer</TableColumn>
+                    <TableColumn>Book set</TableColumn>
+                    <TableColumn>Qty</TableColumn>
+                    <TableColumn>Total</TableColumn>
+                    <TableColumn>Address</TableColumn>
+                    <TableColumn>Contact</TableColumn>
+                  </TableHeader>
 
-                  <Table.Body>
+                  <TableBody>
                     {orders.map((o) => (
-                      <Table.Row key={String(o._id)} id={String(o._id)}>
-                        <Table.Cell>
+                      <TableRow key={String(o._id)} id={String(o._id)}>
+                        <TableCell>
                           <div className="py-1">
                             <p className="font-semibold text-slate-900 dark:text-white">
                               {formatDate(o.createdAt)}
@@ -370,9 +380,9 @@ const page = async ({ searchParams }) => {
                               {formatTime(o.createdAt)}
                             </p>
                           </div>
-                        </Table.Cell>
+                        </TableCell>
 
-                        <Table.Cell>
+                        <TableCell>
                           <div className="min-w-0 max-w-[200px] py-1">
                             <p className="truncate font-semibold text-slate-900 dark:text-white">
                               {o.name}
@@ -381,9 +391,9 @@ const page = async ({ searchParams }) => {
                               {o.email}
                             </p>
                           </div>
-                        </Table.Cell>
+                        </TableCell>
 
-                        <Table.Cell>
+                        <TableCell>
                           <div className="min-w-0 max-w-[240px]">
                             <p
                               className="truncate font-semibold text-slate-900 dark:text-white"
@@ -395,15 +405,15 @@ const page = async ({ searchParams }) => {
                               {o.semester} Semester · {o.publisher}
                             </p>
                           </div>
-                        </Table.Cell>
+                        </TableCell>
 
-                        <Table.Cell>
+                        <TableCell>
                           <span className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 dark:bg-blue-500/20 dark:text-blue-300">
                             {o.quantity} set{Number(o.quantity) > 1 ? "s" : ""}
                           </span>
-                        </Table.Cell>
+                        </TableCell>
 
-                        <Table.Cell>
+                        <TableCell>
                           {priceText(o.totalPrice) ? (
                             <span className="text-sm font-bold text-slate-900 dark:text-white">
                               {priceText(o.totalPrice)}
@@ -413,27 +423,27 @@ const page = async ({ searchParams }) => {
                               Not set
                             </span>
                           )}
-                        </Table.Cell>
+                        </TableCell>
 
-                        <Table.Cell>
+                        <TableCell>
                           <p
                             className="max-w-[240px] truncate text-sm text-slate-600 dark:text-slate-300"
                             title={o.fullAddress}
                           >
                             {o.fullAddress}
                           </p>
-                        </Table.Cell>
+                        </TableCell>
 
-                        <Table.Cell>
+                        <TableCell>
                           <ContactButtons phone={o.phone} name={o.name} />
-                        </Table.Cell>
-                      </Table.Row>
+                        </TableCell>
+                      </TableRow>
                     ))}
-                  </Table.Body>
-                </Table.Content>
-              </Table.ScrollContainer>
+                  </TableBody>
+                </TableContent>
+              </TableScrollContainer>
 
-              <Table.Footer>
+              <TableFooter>
                 <p className="px-5 py-4 text-sm text-slate-500 dark:text-slate-400">
                   Showing{" "}
                   <span className="font-bold text-slate-900 dark:text-white">
@@ -441,8 +451,8 @@ const page = async ({ searchParams }) => {
                   </span>{" "}
                   of {allOrders.length} orders
                 </p>
-              </Table.Footer>
-            </Table>
+              </TableFooter>
+            </TableRoot>
           </section>
         </>
       ) : (

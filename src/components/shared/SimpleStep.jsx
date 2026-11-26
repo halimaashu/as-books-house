@@ -24,7 +24,7 @@ const steps = [
   },
   {
     step: 2,
-    title: "Find your book",
+    title: "Find your learning book",
     short: "Browse",
     icon: Search,
     description:
@@ -42,12 +42,12 @@ const steps = [
   },
   {
     step: 4,
-    title: "Pay with Stripe",
+    title: "Complete secure checkout",
     short: "Pay",
     icon: CreditCard,
     description:
-      "Enter your delivery address and pay securely through Stripe. Card details are encrypted and handled by Stripe, so we never store them. You get an instant receipt by email.",
-    points: ["Stripe secure checkout", "PCI-compliant encryption", "Instant email receipt"],
+      "Enter your delivery address and continue to SSLCommerz to complete payment. Your order and its payment status appear in your account.",
+    points: ["SSLCommerz checkout", "Secure payment flow", "Order history"],
   },
   {
     step: 5,
@@ -55,8 +55,8 @@ const steps = [
     short: "Receive",
     icon: PackageCheck,
     description:
-      "Follow your order from Processing to Shipped to Delivered, with an email at every stage. When the book arrives, leave a review to help other readers.",
-    points: ["Live order tracking", "Status notifications", "Leave a review"],
+      "Review your orders and payment status in your dashboard. When your book arrives, leave a review to help other readers.",
+    points: ["Order history", "Payment status", "Leave a review"],
   },
 ];
 
@@ -80,7 +80,7 @@ const SimpleStep = () => {
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-600 dark:text-slate-400 sm:text-base lg:text-lg">
             No complicated forms and no hidden fees. Pick a book, pay securely with
-            Stripe, and track it until it arrives.
+            SSLCommerz, and review your order from your dashboard.
           </p>
         </header>
 
@@ -196,7 +196,7 @@ const SimpleStep = () => {
 
                 {current === steps.length ? (
                   <a
-                    href="/signup"
+                    href="/signin"
                     className="inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-red-300/50 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-900"
                   >
                     Start ordering

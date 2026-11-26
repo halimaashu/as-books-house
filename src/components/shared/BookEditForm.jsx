@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Form, Button, TextField, TextArea, Label, Input, FieldError } from '@heroui/react';
 import { toast } from 'react-toastify';
 
-const CATEGORIES = ['Story', 'Tech', 'Science', 'History', 'Fantasy', 'Business', 'Polytechnic'];
+const CATEGORIES = ['Japanese', 'German', 'English', 'Bangla', 'Korean', 'Arabic', 'Chinese', 'Grammar & Vocabulary', 'Grammar', 'Vocabulary', 'Academic', 'Literature', 'Exam Preparation', 'Dictionaries', 'Language Learning', 'Other', 'Story', 'Tech', 'Science', 'History', 'Fantasy', 'Business', 'Polytechnic'];
 
 // Your Express API base, e.g. http://localhost:5000
 const API = process.env.NEXT_PUBLIC_API_URL;
@@ -56,6 +56,9 @@ const BookEditForm = ({ book }) => {
     setImageUrl(book.image_url || '');
     setMessage(null);
   };
+  const editCategories = CATEGORIES.includes(book.category)
+    ? CATEGORIES
+    : [book.category, ...CATEGORIES];
 
   const selectClass =
     'w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-green-600 focus:ring-2 focus:ring-green-200';
@@ -87,7 +90,7 @@ const BookEditForm = ({ book }) => {
             defaultValue={book.category}
             className={selectClass}
           >
-            {CATEGORIES.map((c) => (
+            {editCategories.map((c) => (
               <option key={c} value={c}>
                 {c}
               </option>
@@ -160,7 +163,7 @@ const BookEditForm = ({ book }) => {
         <div className="aspect-[3/4] overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
           {imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={imageUrl} alt="Book cover preview" className="h-full w-full object-cover" />
+            <img src={imageUrl} alt="Book cover preview" className="h-full w-full object-contain p-3" />
           ) : (
             <div className="flex h-full items-center justify-center text-sm text-red-500">
               No image

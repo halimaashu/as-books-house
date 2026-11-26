@@ -17,7 +17,7 @@ import {
 } from "react-icons/fi";
 
 export const metadata = {
-  title: "My orders | BooksHunt",
+  title: "My orders | AS Books House",
 };
 
 const filters = [
@@ -60,9 +60,11 @@ const page = async ({ searchParams }) => {
   let orders = [];
   let loadError = false;
   try {
+    const { token } = await auth.api.getToken({ headers: await headers() });
+    if (!token) throw new Error("Authentication token unavailable");
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}order/${encodeURIComponent(user.email)}`,
-      { cache: "no-store" }
+      { cache: "no-store", headers: { Authorization: `Bearer ${token}` } }
     );
     if (!res.ok) throw new Error("Request failed");
     const json = await res.json();
@@ -97,7 +99,7 @@ const page = async ({ searchParams }) => {
           My orders
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Track every book you have ordered from BooksHunt.
+          Track every book you have ordered from AS Books House.
         </p>
       </div>
 
@@ -183,7 +185,7 @@ const page = async ({ searchParams }) => {
                       {order.isPaid ? <FiCheckCircle /> : <FiClock />}
                       {order.isPaid ? "Paid" : "Payment pending"}
                     </span>
-                    <p className="text-xl font-extrabold text-[#e7000b] dark:text-red-400">{money(total)}</p>
+                    <p className="text-xl font-extrabold text-[#cf6410] dark:text-red-400">{money(total)}</p>
                   </div>
                 </div>
 
@@ -256,7 +258,7 @@ const page = async ({ searchParams }) => {
           </p>
           <Link
             href={orders.length === 0 ? "/allBooks" : "/dashboard/orders"}
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#e7000b] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#cf6410] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700"
           >
             {orders.length === 0 ? "Browse books" : "Show all orders"}
           </Link>

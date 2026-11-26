@@ -27,11 +27,19 @@ async function findBook(id) {
   return data.find((d) => String(d._id ?? d.id) === String(id));
 }
 
+function isDigitalBook(book) {
+  const format = [book?.format, book?.book_type, book?.bookType, book?.type, book?.medium]
+    .filter((value) => typeof value === "string")
+    .join(" ")
+    .toLowerCase();
+  return book?.is_ebook === true || book?.isEbook === true || book?.digital === true || /e-?book|digital/.test(format);
+}
+
 export async function generateMetadata({ params }) {
   const _id = await getIdFromParams(params);
   const book = await findBook(_id);
   return {
-    title: book ? `${book.title} | BooksHunt` : "Book not found | BooksHunt",
+    title: book ? `${book.title} | AS Books House` : "Book not found | AS Books House",
     description: book?.description,
   };
 }
@@ -43,6 +51,7 @@ export default async function ViewDetailPage({ params }) {
   // Shows the 404 page instead of crashing when the book does not exist
   if (!book) notFound();
 
+  const digitalBook = isDigitalBook(book);
   const qty = Number(book.available_quantity ?? 0);
   const stock =
     qty === 0
@@ -54,7 +63,7 @@ export default async function ViewDetailPage({ params }) {
   const facts = [
     { icon: FiUser, label: "Author", value: book.author },
     { icon: FiTag, label: "Category", value: book.category },
-    { icon: FiPackage, label: "Available", value: `${qty} pieces` },
+    ...(!digitalBook ? [{ icon: FiPackage, label: "Available", value: `${qty} pieces` }] : []),
   ];
 
   return (
@@ -72,7 +81,7 @@ export default async function ViewDetailPage({ params }) {
         <div className="mt-6 grid items-start gap-8 lg:grid-cols-2 lg:gap-14">
           {/* Cover */}
           <div className="relative mx-auto w-full max-w-md lg:sticky lg:top-24">
-            <div className="absolute inset-0 translate-x-4 translate-y-4 rotate-3 rounded-3xl bg-gradient-to-br from-[#e7000b] to-green-500 opacity-20" />
+            <div className="absolute inset-0 translate-x-4 translate-y-4 rotate-3 rounded-3xl bg-gradient-to-br from-[#cf6410] to-green-500 opacity-20" />
             <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-slate-100 shadow-2xl">
               <Image
                 src={book.image_url}
@@ -80,7 +89,7 @@ export default async function ViewDetailPage({ params }) {
                 fill
                 priority
                 sizes="(max-width: 1024px) 90vw, 448px"
-                className="object-cover"
+                className="object-contain p-4"
               />
               <span className="absolute left-4 top-4 rounded-full bg-white/90 px-4 py-1.5 text-xs font-semibold text-blue-700 shadow backdrop-blur">
                 {book.category}
@@ -91,17 +100,17 @@ export default async function ViewDetailPage({ params }) {
           {/* Details */}
           <div className="space-y-6">
             <div>
-              <span className={`inline-flex rounded-full px-4 py-1.5 text-xs font-bold ${stock.style}`}>
-                {stock.text}
+              <span className={`inline-flex rounded-full px-4 py-1.5 text-xs font-bold ${digitalBook ? "bg-blue-100 text-blue-800" : stock.style}`}>
+                {digitalBook ? "Digital edition" : stock.text}
               </span>
               <h1 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
-                <span className="bg-gradient-to-r from-[#e7000b] to-green-500 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#cf6410] to-green-500 bg-clip-text text-transparent">
                   {book.title}
                 </span>
               </h1>
               <p className="mt-2 text-lg font-semibold text-slate-600">by {book.author}</p>
               {book.price != null && book.price !== "" && (
-                <p className="mt-4 text-4xl font-extrabold text-[#e7000b]">
+                <p className="mt-4 text-4xl font-extrabold text-[#cf6410]">
                   ৳{Number(book.price).toLocaleString("en-US")}
                 </p>
               )}
@@ -112,7 +121,7 @@ export default async function ViewDetailPage({ params }) {
             </p>
 
             {/* Quick facts */}
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className={`grid gap-3 ${digitalBook ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>
               {facts.map(({ icon: Icon, label, value }) => (
                 <div
                   key={label}
@@ -127,22 +136,26 @@ export default async function ViewDetailPage({ params }) {
 
             {/* Actions: pass plain strings/numbers only (ObjectId cannot go to client components) */}
             <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-sm sm:p-6">
-              <BookActions
+              {digitalBook ? (
+                <div className="rounded-2xl bg-amber-50 p-4 text-sm leading-6 text-amber-950">
+                  Digital purchase and secure reading are not available for this title yet. Please contact the bookstore for availability.
+                </div>
+              ) : <BookActions
                 bookId={String(book._id ?? book.id)}
                 stock={qty}
                 title={book.title}
                 price={Number(book.price) || 0}
-              />
+              />}
             </div>
 
             {/* Trust row */}
             <ul className="grid gap-3 text-sm text-slate-600 sm:grid-cols-2">
-              <li className="flex items-center gap-3">
+              {!digitalBook && <li className="flex items-center gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-100 text-lg text-green-600">
                   <FiShield />
                 </span>
                 100% original book
-              </li>
+              </li>}
               <li className="flex items-center gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-100 text-lg text-red-600">
                   <FiTruck />

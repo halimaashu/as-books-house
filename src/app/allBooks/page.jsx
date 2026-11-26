@@ -5,22 +5,32 @@ import { redirect } from "next/navigation";
 import { FiSearch, FiX } from "react-icons/fi";
 import { FaBookOpen } from "react-icons/fa";
 
-const categories = ["All", "Story", "Tech", "Science"];
+const featuredCategories = [
+  "Japanese", "German", "English", "Bangla", "Korean", "Arabic", "Chinese",
+  "Grammar", "Vocabulary", "Academic", "Literature", "Exam Preparation", "Dictionaries", "Language Learning",
+];
 
 export default async function AllPage({ searchParams }) {
   const params = await searchParams;
   const category = params?.category;
   const query = params?.query;
 
-  const allBooks = await getAllBooks();
+  const allBooks = (await getAllBooks()) || [];
+  const categories = [
+    "All",
+    ...featuredCategories,
+    ...new Set((allBooks || []).map((book) => book.category).filter(Boolean)),
+  ].filter((value, index, items) => items.findIndex((item) => item.toLowerCase() === value.toLowerCase()) === index);
 
   const filter = allBooks.filter((book) => {
     const matchesCategory = category
-      ? book.category?.toLowerCase() === category.toLowerCase()
+      ? [book.category, book.title, book.description]
+          .filter(Boolean)
+          .some((value) => value.toLowerCase().includes(category.toLowerCase()))
       : true;
 
     const matchesSearch = query
-      ? book.title?.toLowerCase().includes(query.toLowerCase())
+      ? `${book.title || ""} ${book.author || ""}`.toLowerCase().includes(query.toLowerCase())
       : true;
 
     return matchesCategory && matchesSearch;
@@ -65,7 +75,7 @@ export default async function AllPage({ searchParams }) {
             Explore all books
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm text-slate-600 dark:text-slate-400 sm:text-base">
-            Search by title or pick a category to find your next original read.
+            Search by title or author, or pick a language and learning category.
           </p>
 
           {/* Search */}
@@ -78,13 +88,13 @@ export default async function AllPage({ searchParams }) {
             <input
               name="search"
               type="text"
-              placeholder="Search by title..."
+              placeholder="Search by title or author..."
               defaultValue={query || ""}
               className="min-w-0 flex-1 bg-transparent px-1 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-white dark:placeholder:text-slate-500 sm:text-base"
             />
             <button
               type="submit"
-              className="rounded-xl bg-[#e7000b] px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-900"
+              className="rounded-xl bg-[#cf6410] px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-900"
             >
               Search
             </button>

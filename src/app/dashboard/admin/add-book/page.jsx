@@ -23,7 +23,11 @@ import {
 } from "react-icons/fi";
 import { TbCurrencyTaka } from "react-icons/tb";
 
-const categories = ["Story", "Tech", "Science", "History", "Fantasy", "Business", "Polytechnic"];
+const categories = [
+  "Japanese", "German", "English", "Bangla", "Korean", "Arabic", "Chinese",
+  "Grammar & Vocabulary", "Grammar", "Vocabulary", "Academic", "Literature", "Exam Preparation", "Dictionaries", "Language Learning", "Other",
+  "Story", "Tech", "Science", "History", "Fantasy", "Business",
+];
 const MAX_SIZE_MB = 5;
 
 const fieldClass =
@@ -103,7 +107,6 @@ export default function AddBookPage() {
     e.preventDefault();
     const { data, error } = await authClient.token()
     const token=data?.token
-    console.log(token,"fro varify the token from the add bookd pages")
     
     setError("");
     setSuccess(false);
@@ -220,7 +223,7 @@ export default function AddBookPage() {
                   <img
                     src={preview}
                     alt="Selected cover"
-                    className="h-24 w-20 rounded-lg object-cover shadow"
+                    className="h-24 w-20 rounded-lg bg-slate-100 object-contain p-1 shadow dark:bg-zinc-800"
                   />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{file?.name}</p>
@@ -388,7 +391,7 @@ export default function AddBookPage() {
               <Button
                 type="submit"
                 isDisabled={loading}
-                className="rounded-xl bg-[#e7000b] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-red-200 hover:bg-red-700 dark:shadow-red-900/40"
+                className="rounded-xl bg-[#cf6410] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-red-200 hover:bg-red-700 dark:shadow-red-900/40"
               >
                 {loading ? buttonText : (
                   <>
@@ -407,7 +410,7 @@ export default function AddBookPage() {
           <div className="overflow-hidden rounded-3xl border border-slate-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-lg">
             <div className="relative aspect-[4/5] w-full bg-slate-100 dark:bg-zinc-800">
               {preview ? (
-                <Image src={preview} alt="Cover preview" fill unoptimized className="object-cover" />
+                <Image src={preview} alt="Cover preview" fill unoptimized className="object-contain p-3" />
               ) : (
                 <div className="flex h-full flex-col items-center justify-center gap-2 text-slate-400">
                   <FiImage className="text-5xl" />
@@ -440,7 +443,7 @@ export default function AddBookPage() {
                 {title || "Book title"}
               </h3>
               <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{author ? `by ${author}` : "Author name"}</p>
-              <p className="mt-2 flex items-center text-xl font-extrabold text-[#e7000b] dark:text-red-400">
+              <p className="mt-2 flex items-center text-xl font-extrabold text-[#cf6410] dark:text-red-400">
                 <TbCurrencyTaka />
                 {price !== "" && !Number.isNaN(Number(price)) ? Number(price).toLocaleString("en-US") : "0"}
               </p>

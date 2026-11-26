@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
@@ -16,7 +17,6 @@ import {
   FiX,
   FiHome,
 } from "react-icons/fi";
-import { FaBookOpen } from "react-icons/fa";
 import { ModeToggle } from "@/components/ui/ModeToggle";
 
 // Sidebar links for each role (create these pages as you build them)
@@ -109,12 +109,8 @@ export default function DashboardLayout({ children }) {
     <div className="flex h-full flex-col border-r border-slate-200 bg-white text-slate-600 dark:border-zinc-800 dark:bg-zinc-950 dark:text-slate-300">
       <div className="flex h-16 shrink-0 items-center justify-between px-5">
         <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-green-600 text-white">
-            <FaBookOpen />
-          </span>
-          <span className="text-xl font-extrabold text-slate-900 dark:text-white">
-            Book<span className="ml-0.5 rounded-md bg-red-600 px-1.5 text-white">Hunt</span>
-          </span>
+          <Image src="/as-books-house-logo.jpg" width={40} height={40} alt="" className="h-9 w-9 rounded-lg object-cover" />
+          <span className="text-lg font-extrabold text-slate-900 dark:text-white">AS Books House</span>
         </Link>
         <button
           type="button"

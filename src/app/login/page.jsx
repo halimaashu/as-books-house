@@ -10,9 +10,9 @@ import {
   TextField,
 } from "@heroui/react";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { RiGoogleFill } from "react-icons/ri";
-import { FaBookOpen } from "react-icons/fa";
 import { FiEye, FiEyeOff, FiLogIn, FiCheckCircle, FiAlertCircle } from "react-icons/fi";
 
 const perks = [
@@ -73,12 +73,8 @@ export default function LoginPages() {
         <div className="pointer-events-none absolute -bottom-24 -left-10 h-80 w-80 rounded-full bg-red-500/30 blur-3xl" />
 
         <Link href="/" className="relative flex items-center gap-2">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-red-600">
-            <FaBookOpen />
-          </span>
-          <span className="text-2xl font-extrabold">
-            Book<span className="ml-0.5 rounded-md bg-white px-1.5 text-red-600">Hunt</span>
-          </span>
+          <Image src="/as-books-house-logo.jpg" width={44} height={44} alt="" className="h-10 w-10 rounded-lg object-cover" />
+          <span className="text-xl font-extrabold">AS Books <span className="text-orange-200">House</span></span>
         </Link>
 
         <div className="relative">
@@ -99,7 +95,7 @@ export default function LoginPages() {
         </div>
 
         <p className="relative text-xs text-green-100/70">
-          © {new Date().getFullYear()} BooksHunt
+          © {new Date().getFullYear()} AS Books House
         </p>
       </aside>
 
@@ -109,12 +105,8 @@ export default function LoginPages() {
         <div className="w-full max-w-md rounded-3xl border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/60 dark:border-slate-800 dark:bg-zinc-900 dark:shadow-black/40 sm:p-10 lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none dark:lg:bg-transparent">
           {/* Mobile logo */}
           <Link href="/" className="mb-6 flex items-center gap-2 lg:hidden">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-green-600 text-white">
-              <FaBookOpen />
-            </span>
-            <span className="text-xl font-extrabold text-slate-900 dark:text-white">
-              Book<span className="text-red-600 dark:text-red-400">Hunt</span>
-            </span>
+            <Image src="/as-books-house-logo.jpg" width={40} height={40} alt="" className="h-9 w-9 rounded-lg object-cover" />
+            <span className="text-lg font-extrabold text-slate-900 dark:text-white">AS Books House</span>
           </Link>
 
           <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
@@ -189,7 +181,7 @@ export default function LoginPages() {
             <Button
               type="submit"
               isDisabled={loading || googleLoading}
-              className="w-full rounded-xl bg-[#e7000b] py-6 text-base font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 dark:shadow-red-900/40"
+              className="w-full rounded-xl bg-[#cf6410] py-6 text-base font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 dark:shadow-red-900/40"
             >
               {loading ? (
                 "Logging in..."

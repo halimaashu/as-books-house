@@ -1,20 +1,22 @@
-import { getAllBooks } from "@/lib/data";
 import React from "react";
 import Book from "../ui/Book";
 
-export default async function SpeachileBooks() {
-  const books = await getAllBooks();
-  console.log(books, "fro speachile pages");
+export default function SpeachileBooks({ books = [] }) {
   const specialBooks = books.slice(7, 12);
   return (
-    <div className="container mx-auto  py-10 px-3">
-      <h1 className="bg-gradient-to-r from-red-600 to-green-500 bg-clip-text text-transparent text-3xl md:text-5xl font-bold text-center">Special Books</h1>
-      <p className="mt-4 text-gray-500 text-base md:text-lg text-center">Discover handpicked books that readers are loving right now.</p>
-      <div className=" grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+    <section className="container mx-auto px-5 py-14 sm:px-8 sm:py-20">
+      <div className="mb-8 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[.16em] text-[#cf6410]">From our shelves</p>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[#10283f] dark:text-white md:text-4xl">A few good reads</h2>
+        </div>
+        <p className="max-w-md text-sm leading-6 text-slate-600 dark:text-slate-400 md:text-base">Take a closer look at a selection from the collection. Your next favorite may be here.</p>
+      </div>
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {specialBooks.map((book) => (
           <Book key={book._id} book={book} />
         ))}
       </div>
-    </div>
+    </section>
   );
 }

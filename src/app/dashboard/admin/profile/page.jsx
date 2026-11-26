@@ -53,7 +53,7 @@ export default function ProfilePage() {
           </p>
           <Link
             href="/login"
-            className="mt-6 inline-flex rounded-xl bg-[#e7000b] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 dark:shadow-red-900/40"
+            className="mt-6 inline-flex rounded-xl bg-[#cf6410] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 dark:shadow-red-900/40"
           >
             Go to login
           </Link>
@@ -172,7 +172,7 @@ export default function ProfilePage() {
               </Link>
               <Link
                 href="/allBooks"
-                className="group rounded-3xl bg-[#e7000b] p-5 text-white shadow-lg shadow-red-200 transition hover:-translate-y-1 hover:bg-red-700 dark:shadow-red-900/40"
+                className="group rounded-3xl bg-[#cf6410] p-5 text-white shadow-lg shadow-red-200 transition hover:-translate-y-1 hover:bg-red-700 dark:shadow-red-900/40"
               >
                 <FiBookOpen className="text-2xl" />
                 <p className="mt-4 text-sm font-bold">Browse books</p>

@@ -1,7 +1,17 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { Table } from "@heroui/react";
+import {
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableContent,
+  TableFooter,
+  TableHeader,
+  TableRoot,
+  TableRow,
+  TableScrollContainer,
+} from "@/components/ui/HeroTable";
 import Link from "next/link";
 import React from "react";
 import {
@@ -17,7 +27,7 @@ import {
 import { TbCurrencyTaka } from "react-icons/tb";
 
 export const metadata = {
-  title: "Orders | BooksHunt admin",
+  title: "Orders | AS Books House admin",
 };
 
 const statusFilters = [
@@ -70,8 +80,6 @@ const page = async ({ searchParams }) => {
     const { token } = await auth.api.getToken({
       headers: await headers(),
     });
-    console.log(token,"from ADDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
-
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}orders`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -155,7 +163,7 @@ const page = async ({ searchParams }) => {
           Orders
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          All orders placed on BooksHunt, newest first.
+          All orders placed on AS Books House, newest first.
         </p>
       </div>
 
@@ -235,29 +243,29 @@ const page = async ({ searchParams }) => {
       {/* Table */}
       {orders.length > 0 ? (
         <section className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
-          <Table>
-            <Table.ScrollContainer>
-              <Table.Content
+          <TableRoot>
+            <TableScrollContainer>
+              <TableContent
                 aria-label="All orders table"
                 className="min-w-[1040px]"
               >
-                <Table.Header>
-                  <Table.Column isRowHeader>Order</Table.Column>
-                  <Table.Column>Customer</Table.Column>
-                  <Table.Column>Book</Table.Column>
-                  <Table.Column>Total</Table.Column>
-                  <Table.Column>Status</Table.Column>
-                  <Table.Column>Delivery address</Table.Column>
-                  <Table.Column>View</Table.Column>
-                </Table.Header>
+                <TableHeader>
+                  <TableColumn isRowHeader>Order</TableColumn>
+                  <TableColumn>Customer</TableColumn>
+                  <TableColumn>Book</TableColumn>
+                  <TableColumn>Total</TableColumn>
+                  <TableColumn>Status</TableColumn>
+                  <TableColumn>Delivery address</TableColumn>
+                  <TableColumn>View</TableColumn>
+                </TableHeader>
 
-                <Table.Body>
+                <TableBody>
                   {orders.map((o) => {
                     const tranId = String(o.transitionId || o.tran_id || o._id);
                     return (
-                      <Table.Row key={String(o._id)} id={String(o._id)}>
+                      <TableRow key={String(o._id)} id={String(o._id)}>
                         {/* Order: date and short id */}
-                        <Table.Cell>
+                        <TableCell>
                           <div className="py-1">
                             <p className="font-semibold text-slate-900 dark:text-white">
                               {formatDate(o.createdAt)}
@@ -272,10 +280,10 @@ const page = async ({ searchParams }) => {
                               #{tranId.slice(-8)}
                             </p>
                           </div>
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* Customer */}
-                        <Table.Cell>
+                        <TableCell>
                           <div className="min-w-0 max-w-[220px] py-1">
                             <p className="truncate font-semibold text-slate-900 dark:text-white">
                               {o.name}
@@ -288,10 +296,10 @@ const page = async ({ searchParams }) => {
                               {o.phone}
                             </p>
                           </div>
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* Book */}
-                        <Table.Cell>
+                        <TableCell>
                           <div className="min-w-0 max-w-[200px]">
                             <p className="truncate font-semibold text-slate-900 dark:text-white">
                               {o.bookTitle}
@@ -300,18 +308,18 @@ const page = async ({ searchParams }) => {
                               {o.quantity} × ৳{num(o.price)}
                             </p>
                           </div>
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* Total */}
-                        <Table.Cell>
+                        <TableCell>
                           <span className="inline-flex items-center text-sm font-bold text-slate-900 dark:text-white">
                             <TbCurrencyTaka className="text-lg" />
                             {num(totalOf(o))}
                           </span>
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* Status */}
-                        <Table.Cell>
+                        <TableCell>
                           <span
                             className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
                               o.isPaid
@@ -322,20 +330,20 @@ const page = async ({ searchParams }) => {
                             {o.isPaid ? <FiCheckCircle /> : <FiClock />}
                             {o.isPaid ? "Paid" : "Pending"}
                           </span>
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* Address */}
-                        <Table.Cell>
+                        <TableCell>
                           <p
                             className="max-w-[240px] truncate text-sm text-slate-600 dark:text-slate-300"
                             title={parseAddress(o.properAddress)}
                           >
                             {parseAddress(o.properAddress)}
                           </p>
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* Actions */}
-                        <Table.Cell>
+                        <TableCell>
                           <Link
                             href={`/book/${o.bookId}`}
                             aria-label={`View ${o.bookTitle}`}
@@ -343,15 +351,15 @@ const page = async ({ searchParams }) => {
                           >
                             <FiEye />
                           </Link>
-                        </Table.Cell>
-                      </Table.Row>
+                        </TableCell>
+                      </TableRow>
                     );
                   })}
-                </Table.Body>
-              </Table.Content>
-            </Table.ScrollContainer>
+                </TableBody>
+              </TableContent>
+            </TableScrollContainer>
 
-            <Table.Footer>
+            <TableFooter>
               <p className="px-5 py-4 text-sm text-slate-500 dark:text-slate-400">
                 Showing{" "}
                 <span className="font-bold text-slate-900 dark:text-white">
@@ -359,8 +367,8 @@ const page = async ({ searchParams }) => {
                 </span>{" "}
                 of {allOrders.length} orders
               </p>
-            </Table.Footer>
-          </Table>
+            </TableFooter>
+          </TableRoot>
         </section>
       ) : (
         <div className="mx-auto max-w-md rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-14 text-center dark:border-zinc-700 dark:bg-zinc-950">

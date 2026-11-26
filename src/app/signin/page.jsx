@@ -14,7 +14,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { RiGoogleFill } from "react-icons/ri";
-import { FaBookOpen, FaStar } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 import {
   FiEye,
   FiEyeOff,
@@ -26,7 +26,7 @@ import {
 
 const perks = [
   "Thousands of original books in every genre",
-  "Secure Stripe payment and tracked delivery",
+  "Secure checkout and order history",
   "Free account, ready in under a minute",
 ];
 
@@ -118,12 +118,8 @@ export default function SignUpPage() {
 
         <div className="relative flex h-full flex-col justify-between p-6 text-white sm:p-8 lg:p-12">
           <Link href="/" className="flex w-fit items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-red-600 sm:h-10 sm:w-10">
-              <FaBookOpen />
-            </span>
-            <span className="text-xl font-extrabold sm:text-2xl">
-              Book<span className="ml-0.5 rounded-md bg-white px-1.5 text-red-600">Hunt</span>
-            </span>
+            <Image src="/as-books-house-logo.jpg" width={44} height={44} alt="" className="h-10 w-10 rounded-lg object-cover" />
+            <span className="text-xl font-extrabold sm:text-2xl">AS Books House</span>
           </Link>
 
           {/* Mobile tagline */}
@@ -152,7 +148,7 @@ export default function SignUpPage() {
               <p className="mt-2 max-w-xs text-sm font-medium">
                 &quot;Original books, fast delivery, and super easy checkout.&quot;
               </p>
-              <p className="mt-1 text-xs text-white/70">A happy BooksHunt reader</p>
+              <p className="mt-1 text-xs text-white/70">A happy AS Books House reader</p>
             </div>
           </div>
         </div>
@@ -165,7 +161,7 @@ export default function SignUpPage() {
             Create your account
           </h1>
           <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-            Join BooksHunt and start reading today.
+            Join AS Books House and start reading today.
           </p>
 
           {error && (
@@ -326,7 +322,7 @@ export default function SignUpPage() {
             <Button
               type="submit"
               isDisabled={loading || googleLoading || success}
-              className="mt-2 w-full rounded-xl bg-[#e7000b] py-6 text-base font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 dark:shadow-red-900/40"
+              className="mt-2 w-full rounded-xl bg-[#cf6410] py-6 text-base font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 dark:shadow-red-900/40"
             >
               {loading ? (
                 "Creating account..."

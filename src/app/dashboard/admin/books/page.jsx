@@ -1,5 +1,15 @@
 import { getAllBooks } from "@/lib/data";
-import { Table } from "@heroui/react";
+import {
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableContent,
+  TableFooter,
+  TableHeader,
+  TableRoot,
+  TableRow,
+  TableScrollContainer,
+} from "@/components/ui/HeroTable";
 import Link from "next/link";
 import React from "react";
 import DeleteBookButton from "@/components/shared/DeleteBookButton";
@@ -79,7 +89,7 @@ const page = async ({ searchParams }) => {
         </div>
         <Link
           href="/dashboard/admin/add-book"
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#e7000b] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-900"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#cf6410] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-900"
         >
           <FiPlusCircle />
           Add new book
@@ -145,56 +155,56 @@ const page = async ({ searchParams }) => {
       {/* Table */}
       {books.length > 0 ? (
         <section className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
-          <Table>
-            <Table.ScrollContainer>
-              <Table.Content aria-label="Manage books table" className="min-w-[820px]">
-                <Table.Header>
-                  <Table.Column isRowHeader>Book</Table.Column>
-                  <Table.Column>Category</Table.Column>
-                  <Table.Column>Stock</Table.Column>
-                  <Table.Column>Price</Table.Column>
-                  <Table.Column>Actions</Table.Column>
-                </Table.Header>
+          <TableRoot>
+            <TableScrollContainer>
+              <TableContent aria-label="Manage books table" className="min-w-[820px]">
+                <TableHeader>
+                  <TableColumn isRowHeader>Book</TableColumn>
+                  <TableColumn>Category</TableColumn>
+                  <TableColumn>Stock</TableColumn>
+                  <TableColumn>Price</TableColumn>
+                  <TableColumn>Actions</TableColumn>
+                </TableHeader>
 
-                <Table.Body>
+                <TableBody>
                   {books.map((book) => {
                     const badge = stockBadge(qtyOf(book));
                     const hasPrice =
                       book.price != null && book.price !== "" && Number(book.price) > 0;
                     return (
-                      <Table.Row key={String(book._id)} id={String(book._id)}>
+                      <TableRow key={String(book._id)} id={String(book._id)}>
                         {/* Book: cover, title, author */}
-                        <Table.Cell>
+                        <TableCell>
                           <div className="flex items-center gap-4 py-1">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                               src={book.image_url}
                               alt={book.title}
-                              className="h-16 w-12 shrink-0 rounded-md bg-slate-100 object-cover shadow dark:bg-zinc-800"
+                              className="h-16 w-12 shrink-0 rounded-md bg-slate-100 object-contain p-1 shadow dark:bg-zinc-800"
                             />
                             <div className="min-w-0 max-w-[260px]">
                               <p className="truncate font-semibold text-slate-900 dark:text-white">{book.title}</p>
                               <p className="truncate text-xs text-slate-500 dark:text-slate-400">by {book.author}</p>
                             </div>
                           </div>
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* Category */}
-                        <Table.Cell>
+                        <TableCell>
                           <span className="inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 dark:bg-blue-500/20 dark:text-blue-300">
                             {book.category}
                           </span>
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* Stock */}
-                        <Table.Cell>
+                        <TableCell>
                           <span className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${badge.style}`}>
                             {badge.text}
                           </span>
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* Price (taka) */}
-                        <Table.Cell>
+                        <TableCell>
                           {hasPrice ? (
                             <span className="inline-flex items-center text-sm font-bold text-slate-900 dark:text-white">
                               <TbCurrencyTaka className="text-lg" />
@@ -205,10 +215,10 @@ const page = async ({ searchParams }) => {
                               No price
                             </span>
                           )}
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* Actions */}
-                        <Table.Cell>
+                        <TableCell>
                           <div className="flex items-center gap-2">
                             <Link
                               href={`/book/${book._id}`}
@@ -227,21 +237,21 @@ const page = async ({ searchParams }) => {
                             {/* String() because a Mongo ObjectId cannot be passed to a client component */}
                             <DeleteBookButton id={String(book._id)} title={book.title} />
                           </div>
-                        </Table.Cell>
-                      </Table.Row>
+                        </TableCell>
+                      </TableRow>
                     );
                   })}
-                </Table.Body>
-              </Table.Content>
-            </Table.ScrollContainer>
+                </TableBody>
+              </TableContent>
+            </TableScrollContainer>
 
-            <Table.Footer>
+            <TableFooter>
               <p className="px-5 py-4 text-sm text-slate-500 dark:text-slate-400">
                 Showing <span className="font-bold text-slate-900 dark:text-white">{books.length}</span> of{" "}
                 {allBooks.length} books
               </p>
-            </Table.Footer>
-          </Table>
+            </TableFooter>
+          </TableRoot>
         </section>
       ) : (
         <div className="mx-auto max-w-md rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-14 text-center dark:border-zinc-700 dark:bg-zinc-950">

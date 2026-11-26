@@ -13,7 +13,7 @@ import {
 } from "react-icons/fi";
 
 export const metadata = {
-  title: "Payment failed | BooksHunt",
+  title: "Payment failed | AS Books House",
 };
 
 const reasons = [
@@ -35,7 +35,7 @@ const page = async ({ params }) => {
         {/* Animated cross */}
         <div className="relative mx-auto flex h-24 w-24 items-center justify-center">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400/40 dark:bg-red-500/30" />
-          <span className="relative flex h-24 w-24 items-center justify-center rounded-full bg-[#e7000b] text-5xl text-white shadow-lg shadow-red-300 dark:shadow-red-900/50">
+          <span className="relative flex h-24 w-24 items-center justify-center rounded-full bg-[#cf6410] text-5xl text-white shadow-lg shadow-red-300 dark:shadow-red-900/50">
             <FiX strokeWidth={3} />
           </span>
         </div>
@@ -44,8 +44,8 @@ const page = async ({ params }) => {
           Payment failed
         </h1>
         <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
-          Your payment was not completed, so your order was not placed. You can try again
-          whenever you are ready.
+          Your payment was not confirmed. The order remains unpaid; you can try again or
+          contact support if money was deducted.
         </p>
 
         {/* Transaction id */}
@@ -84,7 +84,7 @@ const page = async ({ params }) => {
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Link
             href="/allBooks"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#e7000b] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-950"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#cf6410] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-950"
           >
             <FiRefreshCw />
             Try again

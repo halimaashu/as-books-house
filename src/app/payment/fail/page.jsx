@@ -13,7 +13,7 @@ import {
 } from "react-icons/fi";
 
 export const metadata = {
-  title: "Payment failed | BooksHunt",
+  title: "Payment failed | AS Books House",
 };
 
 // Steps for a real failed payment
@@ -103,7 +103,7 @@ const page = async ({ params }) => {
           <span
             className={`relative flex h-24 w-24 items-center justify-center rounded-full text-5xl text-white shadow-lg ${
               isFailed
-                ? "bg-[#e7000b] shadow-red-300 dark:shadow-red-900/50"
+                ? "bg-[#cf6410] shadow-red-300 dark:shadow-red-900/50"
                 : "bg-amber-500 shadow-amber-300 dark:shadow-amber-900/50"
             }`}
           >
@@ -172,7 +172,7 @@ const page = async ({ params }) => {
           {isFailed ? (
             <Link
               href="/allBooks"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#e7000b] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-950"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#cf6410] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-950"
             >
               <FiRefreshCw />
               Try again
@@ -181,7 +181,7 @@ const page = async ({ params }) => {
             <>
               <Link
                 href="/dashboard/orders"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#e7000b] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-950"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#cf6410] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-950"
               >
                 <FiShoppingBag />
                 My orders

@@ -1,7 +1,7 @@
 "use client"
 import Link from "next/link";
+import Image from "next/image";
 import React from "react";
-import { FaBookOpen, FaFacebook, FaLinkedin } from "react-icons/fa";
 import { MdOutgoingMail } from "react-icons/md";
 import { FaMagnifyingGlassLocation } from "react-icons/fa6";
 import { IoLogoWhatsapp } from "react-icons/io";
@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
 const quickLinks = [
   { label: "Home", href: "/" },
   { label: "Books", href: "/allBooks" },
-  { label: "Profile", href: "/profile" },
+  { label: "Profile", href: "/dashboard/profile" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -22,34 +22,25 @@ const services = [
   "Affordable prices",
 ];
 
-// Replace the "#" links with your real profiles
 const socials = [
-  { label: "Facebook", href: "#", icon: FaFacebook, hover: "hover:bg-blue-600" },
-  { label: "LinkedIn", href: "#", icon: FaLinkedin, hover: "hover:bg-blue-700" },
-  { label: "Email", href: "mailto:Ashik@gmail.com", icon: MdOutgoingMail, hover: "hover:bg-red-600" },
+  { label: "Email", href: "mailto:halima520ashu@gmail.com", icon: MdOutgoingMail, hover: "hover:bg-orange-700" },
 ];
 
 export default  function Footer() {
   const pathname=usePathname()
-  console.log(pathname)
 
   return (
     <footer className={`${pathname.startsWith("/dashboard")?"hidden":"relative bg-slate-950 text-slate-300"}`}>
       {/* Top accent line */}
-      <div className="h-1 w-full bg-gradient-to-r from-[#e7000b] via-white/30 to-green-500" />
+      <div className="h-1 w-full bg-gradient-to-r from-[#cf6410] via-white/30 to-green-500" />
 
       <div className="container mx-auto px-5 py-14 sm:px-8 lg:py-20">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-2">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-600 text-white">
-                <FaBookOpen />
-              </span>
-              <span className="text-2xl font-extrabold tracking-tight text-white">
-                Book
-                <span className="ml-0.5 rounded-md bg-red-600 px-1.5">Hunt</span>
-              </span>
+              <Image src="/as-books-house-logo.jpg" width={44} height={44} alt="" className="h-10 w-10 rounded-lg object-cover" />
+              <span className="text-xl font-extrabold tracking-tight text-white">AS Books <span className="text-orange-200">House</span></span>
             </Link>
 
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-400">
@@ -111,24 +102,24 @@ export default  function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:Ashik@gmail.com"
+                  href="mailto:halima520ashu@gmail.com"
                   className="flex items-start gap-3 transition hover:text-white"
                 >
                   <FiMail className="mt-0.5 shrink-0 text-red-500" />
-                  Ashik@gmail.com
+                  halima520ashu@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <FiGlobe className="mt-0.5 shrink-0 text-red-500" />
-                www.BookHunt.com.bd
+                AS Books House · Dhaka
               </li>
               <li>
                 <a
-                  href="https://wa.me/88019xxxxxxxx"
+                  href="https://wa.me/8801975665249"
                   className="flex items-start gap-3 transition hover:text-white"
                 >
                   <IoLogoWhatsapp className="mt-0.5 shrink-0 text-green-500" />
-                  019xxxxxxxx
+                  01975665249
                 </a>
               </li>
             </ul>
@@ -137,7 +128,7 @@ export default  function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-center text-xs text-slate-500 sm:flex-row sm:text-left sm:text-sm">
-          <p>© {new Date().getFullYear()} BooksHunt. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} AS Books House. All rights reserved.</p>
           <p>Made for book lovers in Bangladesh</p>
         </div>
       </div>

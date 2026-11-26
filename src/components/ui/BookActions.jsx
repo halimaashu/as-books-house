@@ -9,16 +9,17 @@ import { FiShoppingCart, FiX, FiCheckCircle, FiMinus, FiPlus } from "react-icons
 
 const WISHLIST_KEY = "wishlist";
 
-const divisions = [
-  "Dhaka",
-  "Chattogram",
-  "Rajshahi",
-  "Khulna",
-  "Barishal",
-  "Sylhet",
-  "Rangpur",
-  "Mymensingh",
-];
+const districtsByDivision = {
+  Dhaka: ["Dhaka", "Faridpur", "Gazipur", "Gopalganj", "Kishoreganj", "Madaripur", "Manikganj", "Munshiganj", "Narayanganj", "Narsingdi", "Rajbari", "Shariatpur", "Tangail"],
+  Chattogram: ["Bandarban", "Brahmanbaria", "Chandpur", "Chattogram", "Cumilla", "Cox's Bazar", "Feni", "Khagrachhari", "Lakshmipur", "Noakhali", "Rangamati"],
+  Rajshahi: ["Bogura", "Joypurhat", "Naogaon", "Natore", "Chapainawabganj", "Pabna", "Rajshahi", "Sirajganj"],
+  Khulna: ["Bagerhat", "Chuadanga", "Jashore", "Jhenaidah", "Khulna", "Kushtia", "Magura", "Meherpur", "Narail", "Satkhira"],
+  Barishal: ["Barguna", "Barishal", "Bhola", "Jhalokati", "Patuakhali", "Pirojpur"],
+  Sylhet: ["Habiganj", "Moulvibazar", "Sunamganj", "Sylhet"],
+  Rangpur: ["Dinajpur", "Gaibandha", "Kurigram", "Lalmonirhat", "Nilphamari", "Panchagarh", "Rangpur", "Thakurgaon"],
+  Mymensingh: ["Jamalpur", "Mymensingh", "Netrokona", "Sherpur"],
+};
+const divisions = Object.keys(districtsByDivision);
 
 const paymentMethods = ["Cash on delivery", "bKash", "Nagad", "Card (Stripe)"];
 
@@ -46,13 +47,18 @@ export default function BookActions({ bookId, stock = 0, title = "", price = 0 }
 
   const [open, setOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [division, setDivision] = useState("");
+  const [district, setDistrict] = useState("");
   const [submitted, setSubmitted] = useState(null); // holds the order data after submit
+  const [processing, setProcessing] = useState(false);
 
   const stockNumber = Number(stock);
   const unitPrice = Number(price) || 0;
   const outOfStock = stockNumber === 0;
   const noPrice = unitPrice <= 0;
-  const total = unitPrice * quantity;
+  const subtotal = unitPrice * quantity;
+  const deliveryCharge = district ? (district === "Dhaka" ? 70 : 130) : null;
+  const total = subtotal + (deliveryCharge || 0);
 
   // Load the saved state after mount (avoids a hydration mismatch)
   useEffect(() => {
@@ -78,6 +84,8 @@ export default function BookActions({ bookId, stock = 0, title = "", price = 0 }
       return;
     }
     setQuantity(1);
+    setDivision("");
+    setDistrict("");
     setSubmitted(null);
     setOpen(true);
   };
@@ -87,39 +95,40 @@ export default function BookActions({ bookId, stock = 0, title = "", price = 0 }
     setSubmitted(null);
   };
 
-  const handleSubmit =async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (processing) return;
+    setProcessing(true);
     const formData = Object.fromEntries(new FormData(e.currentTarget).entries());
-     const { data:token } = await authClient.token();
-     
-    const order = {
-      // product details
-      bookId: String(bookId),
-      bookTitle: title,
-      unitPrice,
-      quantity,
-      totalPrice: total,
-      // customer details
-      ...formData,
-      
-    };
-
-    // console.log("Buy form data:", order);
-    setSubmitted(order);
-    const res= await fetch(`${process.env.NEXT_PUBLIC_API_URL}order`,{
-      method:"POST",
-      headers:{
-        "content-type":"application/json",
-        Authorization: `Bearer ${token.token}`,
-      },
-      body:JSON.stringify(order)
-    })
-    const finalData=await res.json()
-    console.log(finalData,"from my server response")
-    window.location.replace(finalData.url)
-
-
-    // TODO: send `order` to your API here, then go to payment
+    try {
+      const { data: tokenData, error: tokenError } = await authClient.token();
+      if (tokenError || !tokenData?.token) throw new Error("Please sign in again before placing your order.");
+      const order = {
+        bookId: String(bookId),
+        bookTitle: title,
+        unitPrice,
+        quantity,
+        totalPrice: total,
+        ...formData,
+      };
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}order`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${tokenData.token}`,
+        },
+        body: JSON.stringify(order),
+      });
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok || typeof result?.url !== "string" || !result.url.startsWith("https://")) {
+        throw new Error(result?.message || "We could not start secure checkout. Please try again.");
+      }
+      window.location.assign(result.url);
+    } catch (error) {
+      toast.error(error?.message || "We could not start secure checkout. Please try again.");
+    } finally {
+      setProcessing(false);
+    }
   };
 
   const handleWishlist = () => {
@@ -143,7 +152,7 @@ export default function BookActions({ bookId, stock = 0, title = "", price = 0 }
           type="button"
           onClick={openForm}
           disabled={outOfStock || noPrice}
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#e7000b] px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-950"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#cf6410] px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-950"
         >
           <FiShoppingCart className="text-lg" />
           {outOfStock ? "Out of stock" : noPrice ? "Price coming soon" : "Buy now"}
@@ -229,7 +238,7 @@ export default function BookActions({ bookId, stock = 0, title = "", price = 0 }
                     <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
                       <div>
                         <p className="text-xs font-medium text-slate-400">Price</p>
-                        <p className="text-lg font-extrabold text-[#e7000b] dark:text-red-400">
+                        <p className="text-lg font-extrabold text-[#cf6410] dark:text-red-400">
                           ৳{unitPrice.toLocaleString("en-US")}
                         </p>
                       </div>
@@ -262,10 +271,21 @@ export default function BookActions({ bookId, stock = 0, title = "", price = 0 }
                       </div>
 
                       <div className="text-right">
-                        <p className="text-xs font-medium text-slate-400">Total</p>
+                        <p className="text-xs font-medium text-slate-400">Book subtotal</p>
                         <p className="text-xl font-extrabold text-slate-900 dark:text-white">
-                          ৳{total.toLocaleString("en-US")}
+                          ৳{subtotal.toLocaleString("en-US")}
                         </p>
+                      </div>
+                    </div>
+                    <div className="mt-4 space-y-2 border-t border-slate-200 pt-3 text-sm dark:border-zinc-700">
+                      <div className="flex items-center justify-between gap-3 text-slate-600 dark:text-slate-300">
+                        <span>Delivery charge{district ? ` · ${district} District` : ""}</span>
+                        <span className="font-semibold">{deliveryCharge == null ? "Choose district" : `৳${deliveryCharge}`}</span>
+                      </div>
+                      <p className="text-xs text-slate-400">Dhaka District ৳70 · All other districts ৳130</p>
+                      <div className="flex items-center justify-between gap-3 border-t border-slate-200 pt-2 font-bold text-slate-900 dark:border-zinc-700 dark:text-white">
+                        <span>Total due</span>
+                        <span className="text-lg text-[#cf6410]">৳{total.toLocaleString("en-US")}</span>
                       </div>
                     </div>
                   </div>
@@ -335,7 +355,11 @@ export default function BookActions({ bookId, stock = 0, title = "", price = 0 }
                           id="division"
                           name="division"
                           required
-                          defaultValue=""
+                          value={division}
+                          onChange={(event) => {
+                            setDivision(event.target.value);
+                            setDistrict("");
+                          }}
                           className={fieldClass}
                         >
                           <option value="" disabled>Choose division</option>
@@ -346,14 +370,18 @@ export default function BookActions({ bookId, stock = 0, title = "", price = 0 }
                       </div>
                       <div>
                         <label htmlFor="district" className={labelClass}>District</label>
-                        <input
+                        <select
                           id="district"
                           name="district"
-                          type="text"
                           required
-                          placeholder="e.g. Natore"
+                          value={district}
+                          onChange={(event) => setDistrict(event.target.value)}
+                          disabled={!division}
                           className={fieldClass}
-                        />
+                        >
+                          <option value="" disabled>{division ? "Choose district" : "Choose division first"}</option>
+                          {(districtsByDivision[division] || []).map((name) => <option key={name} value={name}>{name}</option>)}
+                        </select>
                       </div>
                     </div>
 
@@ -449,10 +477,11 @@ export default function BookActions({ bookId, stock = 0, title = "", price = 0 }
                   </button>
                   <button
                     type="submit"
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#e7000b] px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 dark:shadow-red-900/40"
+                    disabled={processing}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#cf6410] px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 disabled:cursor-wait disabled:opacity-60 dark:shadow-red-900/40"
                   >
                     <FiShoppingCart />
-                    Confirm order · ৳{total.toLocaleString("en-US")}
+                    {processing ? "Starting secure checkout…" : `Confirm order · ৳${total.toLocaleString("en-US")}`}
                   </button>
                 </div>
               </form>

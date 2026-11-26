@@ -8,16 +8,16 @@ import { FaQuestionCircle } from "react-icons/fa";
 // Edit these answers to match your real policies
 const faqs = [
   {
-    q: "Are the books on BooksHunt original?",
+    q: "Are the books on AS Books House original?",
     a: "Yes. We only sell genuine books sourced from publishers and authorized distributors. We do not sell copies or counterfeit prints.",
   },
   {
     q: "How do I place an order?",
-    a: "Create an account, find your book, open View Details, then click Book Now. Enter your delivery address and pay securely with Stripe. The whole process takes only a few minutes.",
+    a: "Create an account, find a book, open View Details, then choose Buy Now. Enter your delivery address and continue to the secure payment page.",
   },
   {
     q: "Is my payment secure?",
-    a: "Yes. Payments are handled by Stripe, and your card details are encrypted. We never see or store your card information on our servers.",
+    a: "Payments continue through the secure SSLCommerz checkout. AS Books House does not collect your payment credentials in the book ordering form.",
   },
   {
     q: "How long does delivery take?",
@@ -41,7 +41,7 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section className="bg-slate-50 px-4 py-14 transition-colors duration-300 dark:bg-zinc-950 sm:px-6 sm:py-20 lg:py-24">
+    <section id="faq" className="bg-slate-50 px-4 py-14 transition-colors duration-300 dark:bg-zinc-950 sm:px-6 sm:py-20 lg:py-24">
       <div className="container mx-auto grid gap-10 lg:grid-cols-[2fr_3fr] lg:gap-16">
         {/* Left: heading */}
         <div className="text-center lg:sticky lg:top-24 lg:self-start lg:text-left">

@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useState } from "react";
 import { FaBookOpen, FaWhatsapp } from "react-icons/fa";
 import { FiMail, FiMapPin, FiClock, FiSend, FiCheckCircle } from "react-icons/fi";
+import { WHATSAPP_NUMBER } from "@/lib/business-contact";
 
 // Replace with your real details
 const CONTACT_EMAIL = "halima520ashu@gmail.com";
-const WHATSAPP_NUMBER = "8801975665249"; // country code + number, no + or spaces
 
 const info = [
   {
@@ -205,7 +205,7 @@ export default function ContactPage() {
 
               <button
                 type="submit"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#e7000b] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-900 sm:w-fit"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#cf6410] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-200 transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:shadow-red-900/40 dark:focus-visible:ring-offset-zinc-900 sm:w-fit"
               >
                 <FiSend />
                 Send message

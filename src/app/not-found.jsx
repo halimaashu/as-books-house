@@ -1,17 +1,14 @@
-import { Button } from '@heroui/react'
 import Link from 'next/link'
-import React from 'react'
 
 export default function NotFound() {
   return (
-    <div className='bg-base-300 shadow-2xl md:w-1/2 h-screen mx-auto flex flex-col items-center justify-center gap-10'>
-      <h1 className='text-6xl font-bold text-green-500'>-404</h1>
-      <h1 className='text-3xl font-bold text-gray-400'>This Pge is not | found</h1>
-     <Link href={"/"}>
-      <Button className={"rounded-md px-10"} >
-        go HOME
-      </Button>
-     </Link>
+    <div className="mx-auto flex min-h-screen flex-col items-center justify-center gap-6 bg-[#f7f4ee] px-5 text-center dark:bg-[#101923]">
+      <p className="text-sm font-semibold uppercase tracking-[.16em] text-[#cf6410]">AS Books House</p>
+      <h1 className="text-7xl font-semibold tracking-tight text-[#123252] dark:text-white">404</h1>
+      <p className="text-lg text-slate-600 dark:text-slate-300">We couldn’t find that page.</p>
+      <Link href="/" className="rounded-xl bg-[#cf6410] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#a84e0d]">
+        Return to the homepage
+      </Link>
     </div>
   )
 }

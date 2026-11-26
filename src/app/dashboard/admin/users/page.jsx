@@ -1,5 +1,15 @@
 import { getUsers } from "@/lib/data";
-import { Table } from "@heroui/react";
+import {
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableContent,
+  TableFooter,
+  TableHeader,
+  TableRoot,
+  TableRow,
+  TableScrollContainer,
+} from "@/components/ui/HeroTable";
 import Link from "next/link";
 import React from "react";
 import {
@@ -69,7 +79,7 @@ const page = async ({ searchParams }) => {
           Users
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          See everyone who has an account on BooksHunt.
+          See everyone who has an account on AS Books House.
         </p>
       </div>
 
@@ -135,26 +145,26 @@ const page = async ({ searchParams }) => {
       {/* Table */}
       {users.length > 0 ? (
         <section className="overflow-hidden rounded-3xl border border-slate-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm">
-          <Table aria-label="Horizontal scroll table">
-            <Table.ScrollContainer>
-              <Table.Content aria-label="All users table" className="">
-                <Table.Header>
-                  <Table.Column isRowHeader>User</Table.Column>
-                  <Table.Column>Role</Table.Column>
-                  <Table.Column>Email status</Table.Column>
-                  <Table.Column>2FA</Table.Column>
-                  <Table.Column>Language</Table.Column>
-                  <Table.Column>Joined</Table.Column>
-                </Table.Header>
+          <TableRoot aria-label="Horizontal scroll table">
+            <TableScrollContainer>
+              <TableContent aria-label="All users table" className="">
+                <TableHeader>
+                  <TableColumn isRowHeader>User</TableColumn>
+                  <TableColumn>Role</TableColumn>
+                  <TableColumn>Email status</TableColumn>
+                  <TableColumn>2FA</TableColumn>
+                  <TableColumn>Language</TableColumn>
+                  <TableColumn>Joined</TableColumn>
+                </TableHeader>
 
-                <Table.Body>
+                <TableBody>
                   {users.map((user) => {
                     const isAdmin = user.role === "admin";
                     const id = String(user._id);
                     return (
-                      <Table.Row key={id} id={id}>
+                      <TableRow key={id} id={id}>
                         {/* User: avatar, name, email */}
-                        <Table.Cell>
+                        <TableCell>
                           <div className="flex items-center gap-3 py-1">
                             <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-green-600 font-bold text-white">
                               {user.image ? (
@@ -175,10 +185,10 @@ const page = async ({ searchParams }) => {
                               <p className="truncate text-xs text-slate-500 dark:text-slate-400">{user.email}</p>
                             </div>
                           </div>
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* Role */}
-                        <Table.Cell>
+                        <TableCell>
                           <span
                             className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${
                               isAdmin
@@ -188,10 +198,10 @@ const page = async ({ searchParams }) => {
                           >
                             {isAdmin ? "Admin" : "User"}
                           </span>
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* Email verified */}
-                        <Table.Cell>
+                        <TableCell>
                           <span
                             className={`inline-flex items-center gap-1.5 text-sm font-medium ${
                               user.emailVerified ? "text-green-600 dark:text-green-400" : "text-amber-600 dark:text-amber-400"
@@ -200,10 +210,10 @@ const page = async ({ searchParams }) => {
                             {user.emailVerified ? <FiCheckCircle /> : <FiAlertCircle />}
                             {user.emailVerified ? "Verified" : "Not verified"}
                           </span>
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* 2FA */}
-                        <Table.Cell>
+                        <TableCell>
                           <span
                             className={`inline-flex items-center gap-1.5 text-sm font-medium ${
                               user.two_factor_enabled ? "text-green-600 dark:text-green-400" : "text-slate-400 dark:text-slate-500"
@@ -212,35 +222,35 @@ const page = async ({ searchParams }) => {
                             <FiLock />
                             {user.two_factor_enabled ? "On" : "Off"}
                           </span>
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* Language */}
-                        <Table.Cell>
+                        <TableCell>
                           <span className="rounded-md bg-slate-100 dark:bg-zinc-800 px-2 py-1 text-xs font-bold uppercase text-slate-600 dark:text-slate-300">
                             {user.lang || "en"}
                           </span>
-                        </Table.Cell>
+                        </TableCell>
 
                         {/* Joined */}
-                        <Table.Cell>
+                        <TableCell>
                           <span className="text-sm text-slate-600 dark:text-slate-300">
                             {formatDate(user.createdAt)}
                           </span>
-                        </Table.Cell>
-                      </Table.Row>
+                        </TableCell>
+                      </TableRow>
                     );
                   })}
-                </Table.Body>
-              </Table.Content>
-            </Table.ScrollContainer>
+                </TableBody>
+              </TableContent>
+            </TableScrollContainer>
 
-            <Table.Footer>
+            <TableFooter>
               <p className="px-5 py-4 text-sm text-slate-500 dark:text-slate-400">
                 Showing <span className="font-bold text-slate-900 dark:text-white">{users.length}</span> of{" "}
                 {allUsers.length} users
               </p>
-            </Table.Footer>
-          </Table>
+            </TableFooter>
+          </TableRoot>
         </section>
       ) : (
         <div className="mx-auto max-w-md rounded-3xl border border-dashed border-slate-300 bg-white dark:border-zinc-700 dark:bg-zinc-950 px-6 py-14 text-center">
